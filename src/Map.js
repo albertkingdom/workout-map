@@ -47,18 +47,22 @@ export default function Map({ addNewcoords, workouthistory, selectedRecord }) {
     // L.control.layers(null, { markers: markerslayer }).addTo(mapRef.current);
   }, [workouthistory]);
 
-  //   創造layer group
+  //   創造layer group, and add marker to group
   let markersLayer;
 
   if (mapRef.current) {
     markersLayer = L.layerGroup().addTo(mapRef.current);
   }
   useEffect(() => {
+    //   remove marker shadow
+    var myIcon = new L.Icon.Default();
+    myIcon.options.shadowSize = [0, 0];
+
     if (markersLayer) {
       markersLayer.clearLayers();
 
       workouthistory.forEach((element) => {
-        let marker = L.marker(element.position)
+        let marker = L.marker(element.position, { icon: myIcon })
           .bindPopup(element.type)
           .setPopupContent(
             `${element.type} on ${new Date(element.date).getFullYear()}-${
